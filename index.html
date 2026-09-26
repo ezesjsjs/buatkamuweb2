@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Kamu 💌</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #120c1c, #24152f, #3b1f3f);
+            color: white;
+        }
+
+        /* Bintang */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: 0.2;
+                transform: scale(0.7);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
+
+        /* Halaman awal */
+        .opening {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: 1s;
+        }
+
+        .opening.hide {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.2);
+        }
+
+        .opening h1 {
+            font-size: 32px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .envelope {
+            width: 260px;
+            height: 180px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .envelope:hover {
+            transform: translateY(-8px);
+        }
+
+        .envelope-body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #e8a8c7;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .envelope-body::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-bottom: 100px solid #d889b0;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-top: 100px solid #f0bad4;
+            transform-origin: top;
+            transition: 0.8s;
+            z-index: 3;
+        }
+
+        .heart {
+            position: absolute;
+            z-index: 5;
+            top: 68px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 45px;
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,.2));
+        }
+
+        .hint {
+            margin-top: 25px;
+            color: #eec9dc;
+            font-size: 14px;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .45;
+            }
+        }
+
+        /* Surat */
+        .letter-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(30px);
+            transition: 1s;
+        }
+
+        .letter-page.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .letter {
+            width: min(700px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            background: rgba(255,255,255,.95);
+            color: #342334;
+            border-radius: 18px;
+            box-shadow: 0 25px 80px rgba(0,0,0,.45);
+            position: relative;
+        }
+
+        .letter::before {
+            content: "♡";
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            color: #d77ca9;
+        }
+
+        .letter h2 {
+            text-align: center;
+            color: #a94d7e;
+            margin-bottom: 25px;
+            font-family: Georgia, serif;
+        }
+
+        .date {
+            text-align: right;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .content {
+            line-height: 1.9;
+            font-size: 16px;
+            white-space: pre-line;
+        }
+
+        .signature {
+            margin-top: 30px;
+            text-align: right;
+            font-family: Georgia, serif;
+            font-size: 18px;
+            color: #a94d7e;
+        }
+
+        .secret-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 30px;
+            background: #a94d7e;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .3s;
+        }
+
+        .secret-btn:hover {
+            transform: scale(1.05);
+            background: #873a65;
+        }
+
+        .secret {
+            text-align: center;
+            margin-top: 20px;
+            color: #a94d7e;
+            font-size: 16px;
+            display: none;
+            animation: fadeIn 1s;
+        }
+
+        .secret.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HP */
+        @media (max-width: 600px) {
+            .opening h1 {
+                font-size: 25px;
+            }
+
+            .envelope {
+                width: 220px;
+                height: 150px;
+            }
+
+            .envelope-body::before {
+                border-left-width: 110px;
+                border-right-width: 110px;
+                border-bottom-width: 85px;
+            }
+
+            .flap {
+                border-left-width: 110px;
+                border-right-width: 110px;
+                border-top-width: 85px;
+            }
+
+            .heart {
+                top: 55px;
+                font-size: 38px;
+            }
+
+            .letter {
+                padding: 28px 22px;
+            }
+
+            .letter h2 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Bintang -->
+    <div class="stars" id="stars"></div>
+
+    <!-- HALAMAN AWAL -->
+    <section class="opening" id="opening">
+
+        <h1>Hei... ada sesuatu buat kamu 💌</h1>
+
+        <div class="envelope" onclick="openLetter()">
+            <div class="envelope-body"></div>
+            <div class="flap" id="flap"></div>
+            <div class="heart">♡</div>
+        </div>
+
+        <p class="hint">Klik amplopnya...</p>
+
+    </section>
+
+
+    <!-- HALAMAN SURAT -->
+    <section class="letter-page" id="letterPage">
+
+        <div class="letter">
+
+            <div class="date">
+                26 September 2026
+            </div>
+
+            <h2>Untuk Kamu 🤍</h2>
+
+            <div class="content" id="letterText"></div>
+
+            <div class="signature">
+                — dari seseorang yang selalu sayang kamu ♡
+            </div>
+
+            <button class="secret-btn" onclick="showSecret()">
+                Jangan klik ini 👀
+            </button>
+
+            <div class="secret" id="secret">
+                Kalau kamu sampai baca ini...
+                <br><br>
+                gyendutt kepoo 
+                <br>
+                Semoga hari kamu selalu diberi kelancaran 
+              aku selalu mendoakan kamu gyendutt jangan lupa makan sayang jaga kesehatan
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script>
+
+        /* Membuat bintang random */
+        const stars = document.getElementById("stars");
+
+        for (let i = 0; i < 100; i++) {
+
+            const star = document.createElement("div");
+
+            star.classList.add("star");
+
+            star.style.left = Math.random() * 100 + "%";
+            star.style.top = Math.random() * 100 + "%";
+
+            star.style.animationDelay =
+                Math.random() * 2 + "s";
+
+            stars.appendChild(star);
+        }
+
+
+        /* Isi surat */
+        const message = `
+Hai gyendutt sayangg akuu
+
+Aku sebenarnya nggak tahu harus mulai dari mana.
+
+Ada beberapa hal yang kadang lebih gampang ditulis
+daripada diucapkan secara langsung.
+
+Jadi, lewat surat kecil ini aku cuma mau bilang...
+
+Terima kasih.
+
+Terima kasih karena pernah hadir,
+karena pernah membuat hari-hari terasa sedikit lebih menyenangkan,
+dan karena tanpa sadar kamu sudah menjadi
+salah satu bagian kecil yang berarti.
+
+Aku nggak tahu surat ini akan membuat kamu
+tersenyum, bingung, atau malah ketawa.
+
+Tapi aku harap,
+setidaknya kamu tahu bahwa ada seseorang
+yang dengan tulus berharap kamu selalu baik-baik saja.
+
+Jangan terlalu keras sama diri sendiri.
+
+Kalau suatu hari semuanya terasa berat,
+ingat bahwa kamu nggak harus selalu terlihat kuat.
+
+Istirahat sebentar juga nggak apa-apa.
+
+Dan kalau hari ini belum menjadi hari yang baik,
+semoga besok sedikit lebih baik.
+
+Itu aja.
+
+Jaga kesehatann yaaa kamuu.
+
+🤍
+        `;
+
+
+        /* Buka surat */
+        function openLetter() {
+
+            const flap = document.getElementById("flap");
+            const opening = document.getElementById("opening");
+            const letterPage = document.getElementById("letterPage");
+
+            flap.style.transform = "rotateX(180deg)";
+
+            setTimeout(() => {
+
+                opening.classList.add("hide");
+
+                setTimeout(() => {
+
+                    letterPage.classList.add("show");
+
+                    typeWriter();
+
+                }, 600);
+
+            }, 700);
+        }
+
+
+        /* Efek mengetik */
+        let index = 0;
+
+        function typeWriter() {
+
+            const text = document.getElementById("letterText");
+
+            if (index < message.length) {
+
+                text.innerHTML += message.charAt(index);
+
+                index++;
+
+                setTimeout(typeWriter, 25);
+
+            }
+
+        }
+
+
+        /* Pesan rahasia */
+        function showSecret() {
+
+            const secret = document.getElementById("secret");
+
+            secret.classList.toggle("show");
+
+        }
+
+    </script>
+
+</body>
+</html>
